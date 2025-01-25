@@ -3,14 +3,13 @@
 import { Button } from "@heroui/button"
 import { User } from "@heroui/user"
 import { Link } from "@heroui/link"
-import { useRouter } from "next/router"
-import { usePathname } from "next/navigation";
+
 
 
 
 export default function IndividualUser() {
-    const route = useRouter()
-    const name = route.query
+    
+    const name = "yadak"
     return (
         <div className="container mx-auto">
             <div className="flex justify-between items-center">
