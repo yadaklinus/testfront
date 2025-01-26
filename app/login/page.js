@@ -12,10 +12,11 @@ export default function Login() {
 
     async function handleFormSubmit(ev){
         ev.preventDefault()
-        const response = await axios.post("/api/login",{email,password},{headers:{
-            "Content-Type":"application/json"
-        }})
-        toast.success("welcome")
+        const response = await fetch("/api/login",{
+            method:"POST",
+            body:JSON.stringify({email,password}),
+            headers:{'Content-Type':'application/json'}
+        })
         console.log(response)
     }
     
@@ -26,7 +27,7 @@ export default function Login() {
             <form onSubmit={handleFormSubmit} className="mt-3 text-center container gap-3 justify-center">
                 <Input className="my-3" value={email} onChange={ev => { setEmail(ev.target.value) }} label="Email" type="email"></Input>
                 <Input className="my-3" value={password} onChange={ev => { setPassword(ev.target.value) }} label="Password" type="password"></Input>
-                <Button className={buttonStyles({
+                <Button type="submit" className={buttonStyles({
                     color: "secondary",
                     radius: "full",
                     variant: "shadow",

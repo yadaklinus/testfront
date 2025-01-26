@@ -3,14 +3,24 @@
 import { Button } from "@heroui/button"
 import { User } from "@heroui/user"
 import { Link } from "@heroui/link"
+import { useSession } from "next-auth/react"
+import { useEffect } from "react"
 
 
 
 
 export default function IndividualUser() {
+    const session = useSession()
+    const {status} = session
+
+    useEffect(() => {
+        console.log(status)
+    },[session])
+    
     
     const name = "yadak"
     return (
+       
         <div className="container mx-auto">
             <div className="flex justify-between items-center">
                 <User name={name.toUpperCase()}></User>

@@ -15,24 +15,22 @@ export default function Register() {
 
     async function handleFormSubmit(ev) {
         ev.preventDefault()
-        toast.success("welcome")
         if(email == "" || name == "" || password == ""){
             toast.error("Input Values")
         }
 
         const PromiseHolder = new Promise( async (resolve,reject)=>{
-            const response = await axios.post(`http://localhost:5000/api/auth/createUser`,{email,name,password,phone},{ headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }})
-            if(response.status == 201){
-                setEmail('')
-                setPassword('')
-                setName('')
-                setPhone('')
+            const response = await fetch("/api/register",{
+                method:"POST",
+                body:JSON.stringify({email,name,password,phone}),
+                headers:{'Content-Type': 'application/json'}
+            })
+            if(response.ok)
                 resolve()
-            }else{
+            else
                 reject()
-            }
+
+            console.log(response)
         })
 
         toast.promise(PromiseHolder,{
@@ -40,7 +38,7 @@ export default function Register() {
             success:"User Created",
             error:"Error...."
         })
-        console.log(response)
+       
     }
 
     return (
