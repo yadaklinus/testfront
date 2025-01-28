@@ -5,18 +5,27 @@ import { useState } from "react"
 import { button as buttonStyles } from "@heroui/theme";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 export default function Login() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const {status} = useSession()
+
+    if(status === "authenticated"){
+        return redirect("/user")
+    }
 
     async function handleFormSubmit(ev){
         ev.preventDefault()
-        const response = await fetch("/api/login",{
-            method:"POST",
-            body:JSON.stringify({email,password}),
-            headers:{'Content-Type':'application/json'}
-        })
+        // const response = await fetch("/api/login",{
+        //     method:"POST",
+        //     body:JSON.stringify({email,password}),
+        //     headers:{'Content-Type':'application/json'}
+        // })
+        const response = await signIn('credentials',{email,password,callbackUrl:"/user"})
         console.log(response)
     }
     

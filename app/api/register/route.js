@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { bcrypt } from 'bcrypt'
+import  bcrypt  from 'bcrypt'
 
 export async function POST(req){
     const prisma = new PrismaClient()

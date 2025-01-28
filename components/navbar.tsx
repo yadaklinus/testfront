@@ -26,28 +26,11 @@ import {
   Logo,
 } from "@/components/icons";
 
-export const Navbar = () => {
-  const searchInput = (
-    <Input
-      aria-label="Search"
-      classNames={{
-        inputWrapper: "bg-default-100",
-        input: "text-sm",
-      }}
-      endContent={
-        <Kbd className="hidden lg:inline-block" keys={["command"]}>
-          K
-        </Kbd>
-      }
-      labelPlacement="outside"
-      placeholder="Search..."
-      startContent={
-        <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
-      }
-      type="search"
-    />
-  );
+import { useSession, signOut } from "next-auth/react";
 
+export const Navbar = () => {
+  const session = useSession()
+  const { status } = session
   return (
     <HeroUINavbar maxWidth="xl" position="sticky">
       <NavbarContent className="basis-1/5 sm:basis-full" justify="start">
@@ -80,15 +63,16 @@ export const Navbar = () => {
         justify="end"
       >
         <NavbarItem className="hidden md:flex">
-          <Button
-            isExternal
-            as={Link}
-            className="text-sm font-normal text-default-600 bg-default-100"
-            startContent={<HeartFilledIcon className="text-danger" />}
-            variant="flat"
-          >
-            Login
-          </Button>
+          <Link>
+            <form onSubmit={() => signOut()}>
+              <Button
+                className="text-sm font-normal text-default-600 bg-default-100"
+                type="submit"
+              >
+                LogOut
+              </Button>
+            </form>
+          </Link>
         </NavbarItem>
       </NavbarContent>
 
@@ -99,7 +83,7 @@ export const Navbar = () => {
 
       <NavbarMenu>
 
-        {false ?
+        {status === "authenticated" ?
           <div className="mx-4 mt-2 flex flex-col gap-2">
             {siteConfig.navMenuItemsLogin.map((item, index) => (
               <NavbarMenuItem key={`${item}-${index}`}>
@@ -118,27 +102,14 @@ export const Navbar = () => {
                 </Link>
               </NavbarMenuItem>
             ))}
+            <Link>
+              <form onSubmit={() => signOut()}>
+                <Button type="submit">Logout</Button>
+              </form>
+            </Link>
           </div>
           :
-          <div className="mx-4 mt-2 flex flex-col gap-2">
-            {siteConfig.navMenuItemsLogout.map((item, index) => (
-              <NavbarMenuItem key={`${item}-${index}`}>
-                <Link
-                  color={
-                    index === 2
-                      ? "primary"
-                      : index === siteConfig.navMenuItemsLogout.length - 1
-                        ? "danger"
-                        : "foreground"
-                  }
-                  href="#"
-                  size="lg"
-                >
-                  {item.label}
-                </Link>
-              </NavbarMenuItem>
-            ))}
-          </div>}
+          ""}
       </NavbarMenu>
     </HeroUINavbar>
   );

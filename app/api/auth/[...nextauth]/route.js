@@ -5,6 +5,7 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 
 import { PrismaClient} from '@prisma/client'
+import bcrypt from 'bcrypt'
 
 export const authOptions = {
   secret:process.env.NEXTAUTH_SECRET,
@@ -30,15 +31,14 @@ export const authOptions = {
           const password = credentials?.password
 
           
-        //   const user = await prisma.users.findUnique({where:{email}})
-        //   const passwordOk = user && (password == user.password)
-          //await bcrypt.compare(password,user.password)
+          const user = await prisma.users.findUnique({where:{email}})
+          const passwordOk = user && await bcrypt.compare(password,user.password)
 
           
 
 
-          if(email){
-           return email
+          if(passwordOk){
+           return user
            
           }
          
